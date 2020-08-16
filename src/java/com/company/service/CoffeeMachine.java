@@ -19,6 +19,14 @@ public class CoffeeMachine {
         return processAllRequest(machine.getBeverages());
     }
 
+    public void refillMachine(Beverages beverages)
+    {
+        coffeeMachineStateManager.refillCoffeeMachineQuantity(beverages);
+    }
+
+    public Map<String,Double> getAvailableIngredients() throws InterruptedException {
+        return  coffeeMachineStateManager.getAvailableQuantity();
+    }
     private List<String> processAllRequest(List<Beverages> beverages) throws InterruptedException {
         List<String> result = new ArrayList<>();
         for (Beverages beverage:
@@ -29,15 +37,15 @@ public class CoffeeMachine {
                     UUID uuid = UUID.randomUUID();
                     ProcessRequestThread thread = new ProcessRequestThread("Thread: "+ uuid, beverage);
                     thread.start();
-                    result.add(beverage.getName() + " is prepared.");
+                    result.add(beverage.getName().toLowerCase() + " is prepared.");
                 } else {
-                    String str = (beverage.getName() + "  cannot be prepared because");
+                    String str = (beverage.getName().toLowerCase() + " cannot be prepared because");
                     for (Map.Entry<String, Double> mp :
                             unavailable.entrySet()) {
                         if (mp.getValue() > 0.0)
-                            str += " " + mp.getKey() + " is not sufficient ";
+                            str += " " + mp.getKey().toLowerCase() + " is not sufficient ";
                         else
-                            str += " " + mp.getKey() + " is not available ";
+                            str += " " + mp.getKey().toLowerCase() + " is not available ";
                     }
                     result.add(str);
                 }
@@ -53,11 +61,5 @@ public class CoffeeMachine {
     private void initializeMachine(Outlets outlets, Ingredients total_items_quantity) {
         coffeeMachineStateManager.initializeCoffeeMachine(outlets, total_items_quantity);
     }
-
-    private void refillMachine(Beverages beverages)
-    {
-        coffeeMachineStateManager.refillCoffeeMachineQuantity(beverages);
-    }
-
 
 }
