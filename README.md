@@ -1,4 +1,4 @@
-# coffee
+
 # Project name: Coffee-Machine
 Introduction : Project contains brewing service to serve coffee requests. It exposes 3 functions :
   a. To Serve User Request
