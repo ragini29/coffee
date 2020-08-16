@@ -67,11 +67,9 @@ public class CoffeeMachineStateManager {
                     makeCoffee();
                     updateSlotAvailable.acquire();
                     slotsAvailable++;
-                    System.out.println("Rel");
+                    System.out.println("!! Releasing slot !!");
                     updateSlotAvailable.release();
                     slots.release();
-
-                 update.release();
                 }
             }
 

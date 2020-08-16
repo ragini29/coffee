@@ -25,12 +25,9 @@ public class CoffeeMachine {
         List<String> res = processAllRequest(machine.getBeverages());
 
         // check if no slots is occupied serving request
-
-        if(coffeeMachineStateManager.getSlotsAvailable()!=machine.getOutlets().getCount_n()){
-            while (coffeeMachineStateManager.getSlotsAvailable()!=machine.getOutlets().getCount_n()) {
+           while (coffeeMachineStateManager.getSlotsAvailable()!=machine.getOutlets().getCount_n()) {
                 Thread.sleep(10000);
             }
-        }
         System.out.println("Finished serving request slots available  "+ coffeeMachineStateManager.getSlotsAvailable());
 
         return res;
