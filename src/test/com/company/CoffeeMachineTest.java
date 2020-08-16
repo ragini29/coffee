@@ -21,6 +21,10 @@ public class CoffeeMachineTest {
         Machine machine = getMachine();
         try {
             List<String > result = coffeeMachine.serveMachineRequest(machine);
+            for (String res:
+                 result) {
+                System.out.println(res);
+            }
             Assert.assertEquals(result.size(), 4);
             Assert.assertTrue(result.get(0).toLowerCase().contains("hot_tea is prepared") );
             Assert.assertTrue(result.get(1).toLowerCase().contains("hot_coffee cannot be prepared") );

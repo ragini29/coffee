@@ -14,7 +14,7 @@ public class CoffeeMachineStateManager {
 
     private  static volatile CoffeeMachineStateManager coffeeMachineStateManager = null;
 
-    private long timeToMakeCoffee = 120000;
+    private long timeToMakeCoffee = 60000;
     private Semaphore slots ;
     private Semaphore update = new Semaphore(1);
     private Semaphore updateSlotAvailable = new Semaphore(1);;

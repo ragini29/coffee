@@ -16,7 +16,15 @@ public class CoffeeMachine {
 
     public List<String> serveMachineRequest(Machine machine) throws InterruptedException {
         initializeMachine(machine.getOutlets(), machine.getTotal_items_quantity());
-        return processAllRequest(machine.getBeverages());
+        List<String> res = processAllRequest(machine.getBeverages());
+        if(coffeeMachineStateManager.getSlotsAvailable()!=machine.getOutlets().getCount_n()){
+            while (coffeeMachineStateManager.getSlotsAvailable()!=machine.getOutlets().getCount_n()) {
+                Thread.sleep(10000);
+            }
+        }
+        System.out.println("Finished serving request slots available  "+ coffeeMachineStateManager.getSlotsAvailable());
+
+        return res;
     }
 
     public void refillMachine(Beverages beverages)
@@ -55,7 +63,8 @@ public class CoffeeMachine {
                 Thread.sleep(10000);
 
         }
-        return result;
+
+      return result;
     }
 
     private void initializeMachine(Outlets outlets, Ingredients total_items_quantity) {
