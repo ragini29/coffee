@@ -4,6 +4,8 @@ import com.company.model.Beverages;
 import com.company.model.Ingredients;
 import com.company.model.Outlets;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -13,15 +15,11 @@ public class CoffeeMachineStateManager {
     private  static volatile CoffeeMachineStateManager coffeeMachineStateManager = null;
 
     private long timeToMakeCoffee = 120000;
-    private long timeToRefill = 300000;
     private Semaphore slots ;
     private Semaphore update = new Semaphore(1);
     private Semaphore updateSlotAvailable = new Semaphore(1);;
     private int slotsAvailable = 10;
-    private boolean refill = false;
-    private double maxCapacity = 500.00;
-    private boolean runningLow = false;
-    private Beverages totalBeveragesQuantity;
+    private Beverages totalBeveragesQuantity = new Beverages("total", new Ingredients());
     private CoffeeMachineStateManager()
     {
     }
@@ -34,9 +32,7 @@ public class CoffeeMachineStateManager {
     }
     public void initializeCoffeeMachine(Outlets outlets, Ingredients total_items_quantity)
     {
-        Ingredients ingredients = new Ingredients(total_items_quantity.getTea_leaves_syrup(),total_items_quantity.getGinger_syrup(),
-                total_items_quantity.getHot_milk(), total_items_quantity.getHot_water(),total_items_quantity.getSugar_syrup(), total_items_quantity.getGreen_mixture());
-        totalBeveragesQuantity = new Beverages("total", ingredients);
+        totalBeveragesQuantity.setIngredients(total_items_quantity);
         this.slotsAvailable = outlets.getCount_n();
         this.slots = new Semaphore(outlets.getCount_n());
 
@@ -47,10 +43,12 @@ public class CoffeeMachineStateManager {
         addIngredientsQuantity(beverages);
     }
 
-    public Map<String, Double> isValidRequest(Beverages beverage) {
+    public Map<String, Double> isValidRequest(Beverages beverage) throws InterruptedException {
 
-        return  totalBeveragesQuantity.checkUnavalibility(beverage);
-
+        update.acquire();
+        Map<String, Double> res= totalBeveragesQuantity.checkUnavalibility(beverage);
+        update.release();
+        return  res;
     }
 
     public void processCoffeeRequest(Beverages coffee) {
@@ -78,6 +76,20 @@ public class CoffeeMachineStateManager {
          catch (InterruptedException e) {
             System.out.println("Sorry!! No slots available");
         }
+    }
+
+    public Map<String,Double> getAvailableQuantity() throws InterruptedException {
+        update.acquire();
+        Map<String, Double> availableIngredients = new HashMap<>();
+        availableIngredients.put("hot_water", totalBeveragesQuantity.getIngredients().getHot_water());
+        availableIngredients.put("hot_milk", totalBeveragesQuantity.getIngredients().getHot_milk());
+        availableIngredients.put("ginger_syrup", totalBeveragesQuantity.getIngredients().getGinger_syrup());
+        availableIngredients.put("sugar_syrup", totalBeveragesQuantity.getIngredients().getSugar_syrup());
+        availableIngredients.put("tea_leaves_syrup", totalBeveragesQuantity.getIngredients().getTea_leaves_syrup());
+        availableIngredients.put("green_mixture", totalBeveragesQuantity.getIngredients().getGreen_mixture());
+
+        update.release();
+        return availableIngredients;
     }
 
     private void reduceIngredientQuantity(Beverages coffee) {
