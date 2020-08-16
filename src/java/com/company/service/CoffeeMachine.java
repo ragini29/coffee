@@ -15,8 +15,17 @@ public class CoffeeMachine {
     CoffeeMachineStateManager coffeeMachineStateManager = CoffeeMachineStateManager.getInstance();
 
     public List<String> serveMachineRequest(Machine machine) throws InterruptedException {
+
+       // Initialize machine with number of outlets and total quantity mentioned
+
         initializeMachine(machine.getOutlets(), machine.getTotal_items_quantity());
+
+        // process all beverages request
+
         List<String> res = processAllRequest(machine.getBeverages());
+
+        // check if no slots is occupied serving request
+
         if(coffeeMachineStateManager.getSlotsAvailable()!=machine.getOutlets().getCount_n()){
             while (coffeeMachineStateManager.getSlotsAvailable()!=machine.getOutlets().getCount_n()) {
                 Thread.sleep(10000);
@@ -29,13 +38,16 @@ public class CoffeeMachine {
 
     public void refillMachine(Beverages beverages)
     {
+        System.out.println("!! Refilling machine !!");
         coffeeMachineStateManager.refillCoffeeMachineQuantity(beverages);
     }
 
     public Map<String,Double> getAvailableIngredients() throws InterruptedException {
+        System.out.println("!! Get Available Quantity !!");
         return  coffeeMachineStateManager.getAvailableQuantity();
     }
     private List<String> processAllRequest(List<Beverages> beverages) throws InterruptedException {
+        System.out.println(" Serve all beverages request ");
         List<String> result = new ArrayList<>();
         for (Beverages beverage:
              beverages) {
@@ -68,6 +80,7 @@ public class CoffeeMachine {
     }
 
     private void initializeMachine(Outlets outlets, Ingredients total_items_quantity) {
+        System.out.println("!! Initializing machine !!");
         coffeeMachineStateManager.initializeCoffeeMachine(outlets, total_items_quantity);
     }
 
