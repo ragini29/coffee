@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Beverages{
     private String name;
-    Ingredients ingredients;
+    private Ingredients ingredients;
     public  Beverages()
     {
         

@@ -55,16 +55,16 @@ public class CoffeeMachineTest {
         Ingredients ingredients = new Ingredients(100,100,100,100,100,100);
         Beverages beverages = new Beverages("refill", ingredients);
 
-        coffeeMachine.refillMachine(beverages);
         try {
             Map<String,Double> previous = coffeeMachine.getAvailableIngredients();
+            coffeeMachine.refillMachine(beverages);
             Map<String,Double> result = coffeeMachine.getAvailableIngredients();
-            Assert.assertTrue(result.get("hot_water") == 100+ previous.get("hot_water"));
-            Assert.assertTrue(result.get("hot_milk") == 100+ previous.get("hot_milk"));
-            Assert.assertTrue(result.get("ginger_syrup") == 100+ previous.get("ginger_syrup"));
-            Assert.assertTrue(result.get("sugar_syrup") == 100+ previous.get("sugar_syrup"));
-            Assert.assertTrue(result.get("tea_leaves_syrup") == 100+ previous.get("tea_leaves_syrup"));
-            Assert.assertTrue(result.get("green_mixture") == 100+ previous.get("green_mixture"));
+            Assert.assertTrue(result.get("hot_water") == 100 + previous.get("hot_water"));
+            Assert.assertTrue(result.get("hot_milk") == 100 + previous.get("hot_milk"));
+            Assert.assertTrue(result.get("ginger_syrup") == 100 + previous.get("ginger_syrup"));
+            Assert.assertTrue(result.get("sugar_syrup") == 100 + previous.get("sugar_syrup"));
+            Assert.assertTrue(result.get("tea_leaves_syrup") == 100 + previous.get("tea_leaves_syrup"));
+            Assert.assertTrue(result.get("green_mixture") == 100 + previous.get("green_mixture"));
         } catch (InterruptedException e) {
             Assert.assertTrue(false);
         }
